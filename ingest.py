@@ -60,7 +60,7 @@ def clean_text(text: str) -> str:
 
 def chunk_text(
     text: str,
-    chunk_size: int = 200,
+    chunk_size: int = 250,
     overlap: int = 40,
 ) -> list[str]:
     if overlap >= chunk_size:

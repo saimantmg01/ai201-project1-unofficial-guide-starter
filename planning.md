@@ -55,11 +55,11 @@ official pages, Reddit threads, and New York City housing resources.
      numbers fit the structure of your documents.
      A review-heavy corpus warrants different chunking than a long FAQ. -->
 
-**Chunk size:** 200 characters
+**Chunk size:** 250 characters
 
 **Overlap:** 40 characters
 
-**Reasoning:** The corpus is mixed: Reddit comments are typically 50–300 words (300–1800 characters), while official pages and NYC government guides are longer and more structured. A 200-character chunk keeps Reddit comments focused on one idea per chunk and breaks longer official paragraphs into retrievable pieces. A 40-character overlap (20%) is enough to prevent a sentence from being split at a chunk boundary without duplicating half the chunk's content. The chunker uses a custom `chunk_text()` function that prefers natural boundaries in this order: paragraph break (`\n\n`), newline, sentence end (`. `), word boundary — falling back to a hard character cut only if no boundary falls in the second half of the chunk. After applying overlap, the start of the next chunk is aligned to the nearest word boundary so no chunk begins mid-word.
+**Reasoning:** The corpus is mixed: Reddit comments are short, while official pages and NYC government guides contain longer paragraphs and lists. Initial retrieval testing with 200-character chunks returned the correct sources but sometimes omitted the sentence that directly answered the query. Increasing the target to 250 characters preserves more complete ideas while still producing more than 50 chunks across the corpus. A 40-character overlap prevents context from being lost at boundaries without duplicating too much text. The custom `chunk_text()` function prefers paragraph breaks, newlines, sentence endings, and word boundaries before using a hard character cut.
 
 ---
 
@@ -104,7 +104,7 @@ official pages, Reddit threads, and New York City housing resources.
 
 1. **Contradictory or outdated Reddit advice retrieved with false confidence.** Reddit threads contain opinions from students at different points in time, some of which may be outdated or simply wrong. The embedding model retrieves these chunks with the same confidence as accurate official information, so the LLM treats them as ground truth and generates answers with false confidence. Mitigation: tag chunks with source type (official vs. Reddit) as metadata and use it to signal provenance in the prompt so the LLM can qualify its answers accordingly.
 
-2. **Enumerated lists split across chunk boundaries produce incomplete answers.** The NYC tenant warning signs list and similar structured content can be divided across two chunks at 200-character boundaries. If only one chunk lands in the top-4 retrieved results, the user receives a partial answer — missing warning signs they needed — without knowing information is absent. Mitigation: increase top-k to 6 for queries that pattern-match to list-style sources, or flag this as a known gap during evaluation.
+2. **Enumerated lists split across chunk boundaries produce incomplete answers.** The NYC tenant warning signs list and similar structured content can be divided across multiple 250-character chunks. If only one chunk lands in the top-four retrieved results, the user may receive only part of the list. Mitigation: inspect retrieval for list-style questions and increase top-k when evaluation shows that relevant adjacent chunks are being omitted.
 
 ---
 
@@ -113,7 +113,7 @@ official pages, Reddit threads, and New York City housing resources.
 ```mermaid
 flowchart LR
     A["Document Ingestion\n(Python file I/O\n.txt files in documents/)"]
-    --> B["Chunking\n(Custom boundary-aware splitter\n200 chars / 40 overlap)"]
+    --> B["Chunking\n(Custom boundary-aware splitter\n250 chars / 40 overlap)"]
     --> C["Embedding\n(sentence-transformers\nall-MiniLM-L6-v2)"]
     --> D["Vector Store\n(ChromaDB)"]
     --> E["Retrieval\n(ChromaDB similarity search\ntop-k = 4)"]
@@ -136,15 +136,15 @@ flowchart LR
 
 **Milestone 3 — Ingestion and chunking:**
 - AI tool: Claude
-- Input: Chunking Strategy section (custom boundary-aware splitting with chunk size 200 and overlap 40) and Architecture diagram (shows `.txt` files in the `documents/` folder)
+- Input: Chunking Strategy section (custom boundary-aware splitting with chunk size 250 and overlap 40) and Architecture diagram (shows `.txt` files in the `documents/` folder)
 - Expected output: `load_documents(folder_path)` that reads all source `.txt` files and returns each document's cleaned text with its filename, title, source type, and URL as metadata; `chunk_text(text)` and `build_chunks()` functions that prefer paragraph, newline, sentence, and word boundaries while applying the specified size and overlap
-- Verification: Confirm that all 12 source documents load, print one cleaned document, count the chunks, and inspect five random chunks for readable content, correct source metadata, no empty strings, and no HTML artifacts. The current pipeline produces 66 chunks, which is within the recommended 50–2,000 range.
+- Verification: Confirm that all 12 source documents load, print one cleaned document, count the chunks, and inspect five random chunks for readable content, correct source metadata, no empty strings, and no HTML artifacts. The current pipeline produces 54 chunks, which is within the recommended 50–2,000 range.
 
 **Milestone 4 — Embedding and retrieval:**
 - AI tool: Claude
 - Input: Retrieval Approach section (all-MiniLM-L6-v2, ChromaDB, top-k=4) and Architecture diagram
-- Expected output: `embed_and_store(chunks)` that encodes chunks with sentence-transformers and stores them in a ChromaDB collection; `retrieve(query, k=4)` that embeds a query and returns the top-4 most similar chunks
-- Verification: Run a test query from the Evaluation Plan and confirm the returned chunks are topically relevant to the question
+- Expected output: `embed_and_store(chunks)` that encodes chunks with sentence-transformers and stores them in a persistent ChromaDB collection with source filename, title, URL, source type, and chunk position metadata; `retrieve(query, k=4)` that embeds a query and returns the top-four most similar chunks with cosine distance scores
+- Verification: Run at least three questions from the Evaluation Plan, print all returned chunks with their source metadata and distances, and confirm that the results visibly relate to each question. Top results should have cosine distances below 0.5 before proceeding to generation.
 
 **Milestone 5 — Generation and interface:**
 - AI tool: Claude

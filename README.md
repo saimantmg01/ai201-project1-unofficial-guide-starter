@@ -61,20 +61,22 @@ agencies.
      - Any preprocessing you did before chunking (e.g., stripping HTML, removing headers)
      - What your final chunk count was across all documents -->
 
-**Chunk size:** 200 characters
+**Chunk size:** 250 characters
 
 **Overlap:** 40 characters
 
 **Why these choices fit your documents:** The corpus contains short student
 discussions and compact official guidance. A custom boundary-aware splitter
-targets 200 characters while preferring paragraph breaks, newlines, sentence
-endings, and word boundaries. The 40-character overlap reduces the chance that
-important context is lost at a boundary. Before chunking, the loader separates
-the title, source type, and URL into metadata, excludes `documents/README.txt`,
+targets 250 characters while preferring paragraph breaks, newlines, sentence
+endings, and word boundaries. Initial retrieval tests at 200 characters found
+the correct sources but sometimes missed the sentence containing the answer,
+so the target was increased to preserve more context. The 40-character overlap
+reduces context loss at boundaries. Before chunking, the loader separates the
+title, source type, and URL into metadata, excludes `documents/README.txt`,
 removes the reliability note from the content, and collapses excessive blank
 lines.
 
-**Final chunk count:** 66 chunks across 12 source documents.
+**Final chunk count:** 54 chunks across 12 source documents.
 
 ---
 
@@ -86,9 +88,19 @@ lines.
      Consider: context length limits, multilingual support, accuracy on domain-specific text,
      latency, and local vs. API-hosted. -->
 
-**Model used:**
+**Model used:** `all-MiniLM-L6-v2` from `sentence-transformers`. It runs
+locally, requires no API key, and is fast enough to embed this small
+English-language corpus. The 54 chunk embeddings are stored in a persistent
+ChromaDB collection using cosine distance. Each record includes the source
+filename, title, URL, source type, and position within the source document.
 
-**Production tradeoff reflection:**
+**Production tradeoff reflection:** For a production system, I would compare
+larger local and API-hosted embedding models for retrieval accuracy, latency,
+cost, context length, and multilingual support. A larger model could better
+represent nuanced housing and tenant-rights language, while a multilingual
+model would serve more of Hunter's student population. The current model is a
+reasonable project choice because the documents and questions are short and
+written in English.
 
 ---
 
