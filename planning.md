@@ -148,6 +148,6 @@ flowchart LR
 
 **Milestone 5 — Generation and interface:**
 - AI tool: Claude
-- Input: Domain section, Evaluation Plan (5 test questions with expected answers), and Architecture diagram
-- Expected output: `generate_answer(query, chunks)` that formats a prompt with retrieved chunks as context and calls the Groq API to return an answer; a simple query interface (CLI)
-- Verification: Run all 5 evaluation questions and check whether each answer matches the expected answer in the Evaluation Plan
+- Input: Domain section, Evaluation Plan, grounding requirement, desired answer-plus-source-list format, retrieval module, and Gradio interface structure
+- Expected output: `ask(question)` that retrieves four chunks, rejects weak retrieval above a 0.50 cosine-distance threshold, sends only retrieved context to Groq's `llama-3.3-70b-versatile`, and returns an answer with programmatically generated source metadata; a Gradio interface with a question box, answer panel, and clickable source list
+- Verification: Run two or three supported evaluation questions and confirm every claim is traceable to a retrieved excerpt. Ask an unsupported dining question and confirm the system responds, "I don't have enough information on that," without calling Groq. Verify that source titles and URLs are appended from ChromaDB metadata rather than relying only on model-generated citations.

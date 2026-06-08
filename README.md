@@ -27,6 +27,19 @@ summer closures, and long commutes are scattered across discussion threads.
 NYC rental protections and safety guidance are published separately by city
 agencies.
 
+### Run the Guide
+
+Create `.env` from `.env.example`, add a Groq API key, and build the local
+vector index once:
+
+```bash
+python retrieval.py --index
+python app.py
+```
+
+Open `http://127.0.0.1:7860`, enter a housing or commuting question, and select
+**Ask**. The answer and retrieved source links appear in separate panels.
+
 ---
 
 ## Document Sources
@@ -113,9 +126,20 @@ written in English.
      Do not just say "I told it to use the documents" — show the actual instruction or explain
      the mechanism. -->
 
-**System prompt grounding instruction:**
+**System prompt grounding instruction:** The system prompt tells the model:
+"Answer the user's question using only the supplied source excerpts. Do not use
+outside knowledge or make assumptions. If the excerpts do not contain enough
+information, reply exactly: I don't have enough information on that." It also
+requires bracketed source citations and asks the model to distinguish official
+information from individual student experiences. Before the LLM is called, the
+pipeline rejects a query when its best cosine distance is above `0.50`.
 
-**How source attribution is surfaced in the response:**
+**How source attribution is surfaced in the response:** Retrieved chunks are
+numbered in the prompt so the model can cite them as `[Source 1]`, `[Source 2]`,
+and so on. Independently of the generated answer, the application constructs a
+deduplicated source list from ChromaDB metadata and displays each source's
+title, type, URL, and retrieval distance. This guarantees that attribution is
+shown even if the model omits an inline citation.
 
 ---
 
@@ -127,11 +151,11 @@ written in English.
 
 | # | Question | Expected answer | System response (summarized) | Retrieval quality | Response accuracy |
 |---|----------|-----------------|------------------------------|-------------------|-------------------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | Which subway line stops directly at Hunter College's main 68th Street campus? | The 6 train stops at 68 St-Hunter College. | The 6 stops at 68 St-Hunter College, citing student, Hunter, and MTA sources. | Relevant | Accurate |
+| 2 | Is Hunter-affiliated housing guaranteed to students? | No; space is limited and students must reapply. | Housing is not guaranteed because space is limited and the process is competitive. | Relevant | Accurate |
+| 3 | What alternatives do students discuss when Hunter housing is unavailable or too expensive? | Roommates, sublets, third-party housing, and housing along a convenient transit route. | Suggested shared apartments or sublets, third-party student housing, and housing along a commute route. | Relevant | Accurate |
+| 4 | What should a student consider before choosing a long commute instead of housing near Hunter? | Compare cost, travel time, transfers, reliability, schedule, and the burden of commuting. | Compared starting location, the burden of a four-hour commute, housing cost, and possible financial-aid guidance. It did not explicitly discuss every transit factor in the expected answer. | Relevant | Partially accurate |
+| 5 | What rental warning signs can indicate an illegal or unsafe NYC apartment? | Unusually low prices, unsafe basement or attic rooms, inadequate exits or windows, unpermitted walls, and informal rental arrangements. | Identified low prices, basements or attics without exits, missing windows, unpermitted flex walls, suspicious utility arrangements, and unsafe building conditions. | Relevant | Accurate |
 
 **Retrieval quality:** Relevant / Partially relevant / Off-target  
 **Response accuracy:** Accurate / Partially accurate / Inaccurate
@@ -151,13 +175,22 @@ written in English.
      "The embedding model treated the professor's nickname as out-of-vocabulary and returned
      results from an unrelated review" is an explanation. -->
 
-**Question that failed:**
+**Question that failed:** What should a student consider before choosing a long
+commute instead of housing near Hunter?
 
-**What the system returned:**
+**What the system returned:** It correctly discussed starting location, the
+burden of a four-hour commute, housing costs, and asking the financial-aid
+office for guidance. It did not explicitly mention transfers, transit
+reliability, or class schedule demands.
 
-**Root cause (tied to a specific pipeline stage):**
+**Root cause (tied to a specific pipeline stage):** Retrieval returned relevant
+student-experience chunks, but the corpus does not contain one chunk that
+combines every commute tradeoff in the expected answer. With `top-k=4`, the
+generation stage could only synthesize the factors present in those excerpts.
 
-**What you would change to fix it:**
+**What you would change to fix it:** Add a source specifically comparing NYC
+commute time, transfers, reliability, and class schedules, or retrieve more
+adjacent chunks for broad comparison questions.
 
 ---
 
