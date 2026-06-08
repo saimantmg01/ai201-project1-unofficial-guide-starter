@@ -1,0 +1,26 @@
+TITLE: Hunter College Housing
+SOURCE TYPE: Official Hunter College webpage
+URL: https://www.hunter.cuny.edu/students/campus-life/residence-life/
+RETRIEVED: 2026-06-08
+
+Hunter College offers affiliated housing in Manhattan. The housing is owned and
+operated by Found Study and is intended to provide convenient access to campus,
+public transportation, and New York City opportunities.
+
+Hunter has more than 22,000 students but only a limited number of housing
+spaces. The application process is highly competitive, housing is not
+guaranteed, and students must reapply each year.
+
+The page lists two Hunter housing locations:
+
+- 51st Street Residence: near the 51 St subway station, with standard and
+  deluxe double-room options.
+- 79th Street Residence: at 334 East 79th Street, a few blocks from Hunter's
+  main 68th Street campus.
+
+The page links to eligibility and application instructions, housing policies,
+safety information, frequently asked questions, and contact information.
+
+RELIABILITY NOTE: Treat this official page as authoritative for Hunter's current
+housing locations and application rules. Availability and room details can
+change, so students should verify them before applying.

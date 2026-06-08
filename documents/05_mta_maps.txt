@@ -1,0 +1,25 @@
+TITLE: MTA Maps for Planning a Hunter College Commute
+SOURCE TYPE: Official MTA webpage
+URL: https://www.mta.info/maps
+RETRIEVED: 2026-06-08
+
+The MTA maps page provides several tools for comparing commutes to Hunter
+College:
+
+- A subway diagram showing typical weekday service.
+- A late-night subway diagram.
+- Geographic weekday and late-night subway maps.
+- A geographic map highlighting accessible stations.
+- A large-type subway map.
+- Neighborhood maps and text maps for individual subway lines.
+- Bus maps for the Bronx, Brooklyn, Manhattan, Queens, and Staten Island.
+- Long Island Rail Road and Metro-North diagrams.
+
+Students should use the weekday map for a normal class commute and compare it
+with the late-night map if classes, work, or studying may keep them out late.
+The accessible-stations map is important for anyone who requires step-free
+travel. Borough bus maps can help evaluate housing that is not within walking
+distance of a subway station.
+
+RELIABILITY NOTE: Maps describe normal service patterns. Planned work, delays,
+and temporary changes require live MTA service information.

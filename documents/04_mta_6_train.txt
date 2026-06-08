@@ -1,0 +1,23 @@
+TITLE: MTA 6 Train Line and Hunter College
+SOURCE TYPE: Official MTA webpage
+URL: https://www.mta.info/maps/subway-line-maps/6-line
+RETRIEVED: 2026-06-08
+
+The 6 is the Lexington Avenue local train in Manhattan and continues into the
+Bronx. Hunter College's station is 68 St-Hunter College at East 68th Street and
+Lexington Avenue.
+
+The 68 St-Hunter College station has two side platforms, has no in-station
+transfer to another subway line, and is listed as ADA accessible.
+
+Nearby useful transfer points on the 6 line include:
+
+- 86 St: transfers to the 4 and 5 except during late nights.
+- 59 St: transfers to the N and R, weekday W, 4 and 5 except late nights, and a
+  free out-of-system transfer to Lexington Av/63 St for the F and Q.
+- 51 St: connection to the E and F during listed service periods.
+- Grand Central-42 St: connections to the 4, 5, 7, and S.
+- 14 St-Union Sq: connections to the L, N, Q, R, weekday W, 4, and 5.
+
+RELIABILITY NOTE: This page describes the line and stations, but students should
+check current MTA schedules and planned service changes before traveling.

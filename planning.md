@@ -55,11 +55,11 @@ official pages, Reddit threads, and New York City housing resources.
      numbers fit the structure of your documents.
      A review-heavy corpus warrants different chunking than a long FAQ. -->
 
-**Chunk size:**
+**Chunk size:** 200 characters
 
-**Overlap:**
+**Overlap:** 40 characters
 
-**Reasoning:**
+**Reasoning:** The corpus is mixed: Reddit comments are typically 50–300 words (300–1800 characters), while official pages and NYC government guides are longer and more structured. A 200-character chunk keeps Reddit comments focused on one idea per chunk and breaks longer official paragraphs into retrievable pieces. A 40-character overlap (20%) is enough to prevent a sentence from being split at a chunk boundary without duplicating half the chunk's content. The chunker will use RecursiveCharacterTextSplitter, which splits on paragraph breaks first, then newlines, then spaces, so natural boundaries are preferred over hard character cuts.
 
 ---
 
@@ -71,11 +71,11 @@ official pages, Reddit threads, and New York City housing resources.
      would you weigh in choosing a different embedding model — context length, multilingual
      support, accuracy on domain-specific text, latency? -->
 
-**Embedding model:**
+**Embedding model:** all-MiniLM-L6-v2 via sentence-transformers
 
-**Top-k:**
+**Top-k:** 4
 
-**Production tradeoff reflection:**
+**Production tradeoff reflection:** all-MiniLM-L6-v2 is fast and lightweight but was trained on general text, not housing or transit data. For a real deployment, a model with a longer context window (e.g., text-embedding-3-large from OpenAI) would handle longer official documents better. A multilingual model would matter if serving non-English-speaking Hunter students. The tradeoff is latency and cost: larger models produce better embeddings but are slower and more expensive to run at scale. For this project, all-MiniLM-L6-v2 is appropriate because the queries and documents are short and in English.
 
 ---
 
@@ -102,19 +102,23 @@ official pages, Reddit threads, and New York City housing resources.
      Consider: noisy or inconsistent documents, missing source attribution, off-topic
      retrieval, chunks that split key information across boundaries. -->
 
-1.
+1. **Contradictory or outdated Reddit advice retrieved with false confidence.** Reddit threads contain opinions from students at different points in time, some of which may be outdated or simply wrong. The embedding model retrieves these chunks with the same confidence as accurate official information, so the LLM treats them as ground truth and generates answers with false confidence. Mitigation: tag chunks with source type (official vs. Reddit) as metadata and use it to signal provenance in the prompt so the LLM can qualify its answers accordingly.
 
-2.
+2. **Enumerated lists split across chunk boundaries produce incomplete answers.** The NYC tenant warning signs list and similar structured content can be divided across two chunks at 200-character boundaries. If only one chunk lands in the top-4 retrieved results, the user receives a partial answer — missing warning signs they needed — without knowing information is absent. Mitigation: increase top-k to 6 for queries that pattern-match to list-style sources, or flag this as a known gap during evaluation.
 
 ---
 
 ## Architecture
 
-<!-- Draw a diagram of your pipeline showing the five stages:
-     Document Ingestion → Chunking → Embedding + Vector Store → Retrieval → Generation
-     Label each stage with the tool or library you're using.
-     You can use ASCII art, a Mermaid diagram, or embed a sketch as an image.
-     You'll use this diagram as context when prompting AI tools to implement each stage. -->
+```mermaid
+flowchart LR
+    A["Document Ingestion\n(Python file I/O\n.txt files in documents/)"]
+    --> B["Chunking\n(LangChain\nRecursiveCharacterTextSplitter\n200 chars / 40 overlap)"]
+    --> C["Embedding\n(sentence-transformers\nall-MiniLM-L6-v2)"]
+    --> D["Vector Store\n(ChromaDB)"]
+    --> E["Retrieval\n(ChromaDB similarity search\ntop-k = 4)"]
+    --> F["Generation\n(Groq LLM)"]
+```
 
 ---
 
@@ -131,7 +135,19 @@ official pages, Reddit threads, and New York City housing resources.
      with my specified chunk size and overlap" is a plan. -->
 
 **Milestone 3 — Ingestion and chunking:**
+- AI tool: Claude
+- Input: Chunking Strategy section (chunk size 200, overlap 40, RecursiveCharacterTextSplitter) and Architecture diagram (shows .txt files in documents/ folder)
+- Expected output: `load_documents(folder_path)` that reads all .txt files and returns each document's text with its source filename as metadata; `chunk_documents(docs)` that applies RecursiveCharacterTextSplitter with chunk_size=200 and chunk_overlap=40
+- Verification: Print a sample of chunks and confirm they are ~200 characters; check that adjacent chunks share ~40 characters of overlap
 
 **Milestone 4 — Embedding and retrieval:**
+- AI tool: Claude
+- Input: Retrieval Approach section (all-MiniLM-L6-v2, ChromaDB, top-k=4) and Architecture diagram
+- Expected output: `embed_and_store(chunks)` that encodes chunks with sentence-transformers and stores them in a ChromaDB collection; `retrieve(query, k=4)` that embeds a query and returns the top-4 most similar chunks
+- Verification: Run a test query from the Evaluation Plan and confirm the returned chunks are topically relevant to the question
 
 **Milestone 5 — Generation and interface:**
+- AI tool: Claude
+- Input: Domain section, Evaluation Plan (5 test questions with expected answers), and Architecture diagram
+- Expected output: `generate_answer(query, chunks)` that formats a prompt with retrieved chunks as context and calls the Groq API to return an answer; a simple query interface (CLI)
+- Verification: Run all 5 evaluation questions and check whether each answer matches the expected answer in the Evaluation Plan
