@@ -1,4 +1,4 @@
-# The Unofficial Guide — Project 1
+# Hunter College Housing and Commuting Guide
 
 > **How to use this template:**
 > Complete each section *after* you've built and tested the corresponding part of your system.
@@ -149,13 +149,13 @@ shown even if the model omits an inline citation.
      Be honest — a partially accurate or inaccurate result that you explain well is more
      valuable than a suspiciously perfect result. -->
 
-| # | Question | Expected answer | System response (summarized) | Retrieval quality | Response accuracy |
+| # | Question | Expected answer | Actual system response | Retrieval quality | Response accuracy |
 |---|----------|-----------------|------------------------------|-------------------|-------------------|
-| 1 | Which subway line stops directly at Hunter College's main 68th Street campus? | The 6 train stops at 68 St-Hunter College. | The 6 stops at 68 St-Hunter College, citing student, Hunter, and MTA sources. | Relevant | Accurate |
-| 2 | Is Hunter-affiliated housing guaranteed to students? | No; space is limited and students must reapply. | Housing is not guaranteed because space is limited and the process is competitive. | Relevant | Accurate |
-| 3 | What alternatives do students discuss when Hunter housing is unavailable or too expensive? | Roommates, sublets, third-party housing, and housing along a convenient transit route. | Suggested shared apartments or sublets, third-party student housing, and housing along a commute route. | Relevant | Accurate |
-| 4 | What should a student consider before choosing a long commute instead of housing near Hunter? | Compare cost, travel time, transfers, reliability, schedule, and the burden of commuting. | Compared starting location, the burden of a four-hour commute, housing cost, and possible financial-aid guidance. It did not explicitly discuss every transit factor in the expected answer. | Relevant | Partially accurate |
-| 5 | What rental warning signs can indicate an illegal or unsafe NYC apartment? | Unusually low prices, unsafe basement or attic rooms, inadequate exits or windows, unpermitted walls, and informal rental arrangements. | Identified low prices, basements or attics without exits, missing windows, unpermitted flex walls, suspicious utility arrangements, and unsafe building conditions. | Relevant | Accurate |
+| 1 | Which subway line stops directly at Hunter College's main 68th Street campus? | The 6 train stops at 68 St-Hunter College. | "The 6 subway line stops directly at Hunter College's main 68th Street campus, at the 68 St-Hunter College station [Source 1, Source 2, Source 3]." | Relevant | Accurate |
+| 2 | Is Hunter-affiliated housing guaranteed to students? | No; space is limited and students must reapply. | "According to [Source 3], Hunter-affiliated housing is not guaranteed to students, as the application process is highly competitive and there are only a limited number of housing spaces available." | Relevant | Accurate |
+| 3 | What alternatives do students discuss when Hunter housing is unavailable or too expensive? | Roommates, sublets, third-party housing, and housing along a convenient transit route. | "According to student discussions [Source 1, Source 2, Source 3], alternatives include an off-campus sublet or shared apartment with roommates, third-party student housing, and housing along a commute route." | Relevant | Accurate |
+| 4 | What should a student consider before choosing a long commute instead of housing near Hunter? | Compare cost, travel time, transfers, reliability, schedule, and the burden of commuting. | "A student should consider their starting location, the impact of a long commute on daily life, the cost of housing near Hunter compared with commuting, and whether financial assistance is available [Source 1, Source 2, Source 3]." | Relevant | Partially accurate |
+| 5 | What rental warning signs can indicate an illegal or unsafe NYC apartment? | Unusually low prices, unsafe basement or attic rooms, inadequate exits or windows, unpermitted walls, and informal rental arrangements. | "Warning signs include a price far below comparable apartments, basement or attic listings without adequate exits, rooms without proper windows, unpermitted flex walls, suspicious utility arrangements, and missing safety features [Source 1, Source 2, Source 3, Source 4]." | Relevant | Accurate |
 
 **Retrieval quality:** Relevant / Partially relevant / Off-target  
 **Response accuracy:** Accurate / Partially accurate / Inaccurate
@@ -199,9 +199,22 @@ adjacent chunks for broad comparison questions.
 <!-- Reflect on how planning.md shaped your implementation.
      Answer both questions with at least 2–3 sentences each. -->
 
-**One way the spec helped you during implementation:**
+**One way the spec helped me during implementation:** The spec forced me to
+define the document types, chunk size, overlap, embedding model, top-k value,
+and expected answers before connecting the components. That made debugging more
+systematic: when retrieval returned the correct source but omitted the answer
+sentence, I could identify chunking as the likely cause instead of changing the
+embedding model or prompt at random. The five evaluation questions also gave me
+a stable test set for comparing each pipeline revision.
 
-**One way your implementation diverged from the spec, and why:**
+**One way my implementation diverged from the spec, and why:** The original
+plan used 200-character chunks, but retrieval testing showed that those chunks
+sometimes ended before the decisive sentence. I increased the target to 250
+characters while retaining 40 characters of overlap; this reduced the corpus
+from 66 to 54 chunks and improved answer retrieval while staying above
+the suggested minimum. I also added a `0.50` cosine-distance gate
+before generation, which was not in the initial architecture but was necessary
+to make unsupported questions decline reliably.
 
 ---
 
@@ -216,14 +229,28 @@ adjacent chunks for broad comparison questions.
      chunk_text(). It returned a function using a fixed character split. I overrode the
      chunk size from 500 to 200 because my documents are short reviews, not long guides." -->
 
-**Instance 1**
+**Instance 1: Document ingestion and chunking**
 
-- *What I gave the AI:*
-- *What it produced:*
-- *What I changed or overrode:*
+- *What I gave the AI:* I provided the Documents and Chunking Strategy
+  sections from `planning.md`, the 12 local text files, and the Milestone 3
+  requirements for cleaning, metadata, overlap, chunk inspection, and count.
+- *What it produced:* Claude helped implement `ingest.py`, including metadata
+  parsing, content cleaning, a custom boundary-aware chunker, and diagnostic
+  output for a cleaned document and five random chunks.
+- *What I changed or overrode:* I chose a custom splitter instead of adding
+  LangChain solely for chunking. After retrieval tests exposed incomplete
+  200-character chunks, I directed the chunk size change to 250 characters and
+  updated the plan and README to reflect the measured 54-chunk result.
 
-**Instance 2**
+**Instance 2: Retrieval, grounding, and interface**
 
-- *What I gave the AI:*
-- *What it produced:*
-- *What I changed or overrode:*
+- *What I gave the AI:* I provided the Retrieval Approach, five evaluation
+  questions, Groq grounding requirements, ChromaDB metadata requirements, and
+  the Milestone 5 Gradio interface expectations.
+- *What it produced:* Codex helped implement `retrieval.py`, `query.py`, and
+  `app.py`, including MiniLM embeddings, persistent cosine search, a
+  context-only Groq prompt, and a Gradio answer-and-sources interface.
+- *What I changed or overrode:* I required source attribution to be generated
+  programmatically from ChromaDB metadata instead of trusting the LLM to cite
+  correctly. I also added and tested a `0.50` relevance threshold so an
+  unsupported dining question is rejected before Groq is called.
