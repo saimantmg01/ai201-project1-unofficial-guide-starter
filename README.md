@@ -61,13 +61,20 @@ agencies.
      - Any preprocessing you did before chunking (e.g., stripping HTML, removing headers)
      - What your final chunk count was across all documents -->
 
-**Chunk size:**
+**Chunk size:** 200 characters
 
-**Overlap:**
+**Overlap:** 40 characters
 
-**Why these choices fit your documents:**
+**Why these choices fit your documents:** The corpus contains short student
+discussions and compact official guidance. A custom boundary-aware splitter
+targets 200 characters while preferring paragraph breaks, newlines, sentence
+endings, and word boundaries. The 40-character overlap reduces the chance that
+important context is lost at a boundary. Before chunking, the loader separates
+the title, source type, and URL into metadata, excludes `documents/README.txt`,
+removes the reliability note from the content, and collapses excessive blank
+lines.
 
-**Final chunk count:**
+**Final chunk count:** 66 chunks across 12 source documents.
 
 ---
 

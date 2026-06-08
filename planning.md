@@ -59,7 +59,7 @@ official pages, Reddit threads, and New York City housing resources.
 
 **Overlap:** 40 characters
 
-**Reasoning:** The corpus is mixed: Reddit comments are typically 50–300 words (300–1800 characters), while official pages and NYC government guides are longer and more structured. A 200-character chunk keeps Reddit comments focused on one idea per chunk and breaks longer official paragraphs into retrievable pieces. A 40-character overlap (20%) is enough to prevent a sentence from being split at a chunk boundary without duplicating half the chunk's content. The chunker will use RecursiveCharacterTextSplitter, which splits on paragraph breaks first, then newlines, then spaces, so natural boundaries are preferred over hard character cuts.
+**Reasoning:** The corpus is mixed: Reddit comments are typically 50–300 words (300–1800 characters), while official pages and NYC government guides are longer and more structured. A 200-character chunk keeps Reddit comments focused on one idea per chunk and breaks longer official paragraphs into retrievable pieces. A 40-character overlap (20%) is enough to prevent a sentence from being split at a chunk boundary without duplicating half the chunk's content. The chunker uses a custom `chunk_text()` function that prefers natural boundaries in this order: paragraph break (`\n\n`), newline, sentence end (`. `), word boundary — falling back to a hard character cut only if no boundary falls in the second half of the chunk. After applying overlap, the start of the next chunk is aligned to the nearest word boundary so no chunk begins mid-word.
 
 ---
 
@@ -113,7 +113,7 @@ official pages, Reddit threads, and New York City housing resources.
 ```mermaid
 flowchart LR
     A["Document Ingestion\n(Python file I/O\n.txt files in documents/)"]
-    --> B["Chunking\n(LangChain\nRecursiveCharacterTextSplitter\n200 chars / 40 overlap)"]
+    --> B["Chunking\n(Custom boundary-aware splitter\n200 chars / 40 overlap)"]
     --> C["Embedding\n(sentence-transformers\nall-MiniLM-L6-v2)"]
     --> D["Vector Store\n(ChromaDB)"]
     --> E["Retrieval\n(ChromaDB similarity search\ntop-k = 4)"]
@@ -136,9 +136,9 @@ flowchart LR
 
 **Milestone 3 — Ingestion and chunking:**
 - AI tool: Claude
-- Input: Chunking Strategy section (chunk size 200, overlap 40, RecursiveCharacterTextSplitter) and Architecture diagram (shows .txt files in documents/ folder)
-- Expected output: `load_documents(folder_path)` that reads all .txt files and returns each document's text with its source filename as metadata; `chunk_documents(docs)` that applies RecursiveCharacterTextSplitter with chunk_size=200 and chunk_overlap=40
-- Verification: Print a sample of chunks and confirm they are ~200 characters; check that adjacent chunks share ~40 characters of overlap
+- Input: Chunking Strategy section (custom boundary-aware splitting with chunk size 200 and overlap 40) and Architecture diagram (shows `.txt` files in the `documents/` folder)
+- Expected output: `load_documents(folder_path)` that reads all source `.txt` files and returns each document's cleaned text with its filename, title, source type, and URL as metadata; `chunk_text(text)` and `build_chunks()` functions that prefer paragraph, newline, sentence, and word boundaries while applying the specified size and overlap
+- Verification: Confirm that all 12 source documents load, print one cleaned document, count the chunks, and inspect five random chunks for readable content, correct source metadata, no empty strings, and no HTML artifacts. The current pipeline produces 66 chunks, which is within the recommended 50–2,000 range.
 
 **Milestone 4 — Embedding and retrieval:**
 - AI tool: Claude
