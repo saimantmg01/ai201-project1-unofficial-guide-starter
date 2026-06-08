@@ -14,6 +14,19 @@
      Example: "Student reviews of CS professors at [university] — useful because official
      course descriptions don't reflect teaching style, exam difficulty, or workload." -->
 
+This project is an unofficial guide to housing and commuting for Hunter College
+students. It is designed to help students compare Hunter-affiliated housing,
+off-campus housing, and commuting by answering practical questions about
+availability, neighborhoods, roommates, transit routes, rental safety, and
+tenant rights.
+
+The information is valuable but difficult to find in one place. Official Hunter
+College and MTA pages explain residences, campus locations, and transit routes,
+while students' experiences with waitlists, housing costs, roommate searches,
+summer closures, and long commutes are scattered across discussion threads.
+NYC rental protections and safety guidance are published separately by city
+agencies.
+
 ---
 
 ## Document Sources
@@ -24,16 +37,18 @@
 
 | # | Source | Type | URL or file path |
 |---|--------|------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 1 | Hunter College Housing | Official college housing page | https://www.hunter.cuny.edu/students/campus-life/residence-life/ |
+| 2 | Hunter College 68th Street Campus | Official campus directions | https://www.hunter.cuny.edu/about/campus-information/68th-street-campus/ |
+| 3 | CUNY Residence Life | Official CUNY housing resource | https://www.cuny.edu/about/administration/offices/student-affairs/programs-services/housing-residence-life/ |
+| 4 | MTA 6 Train Line Map | Official transit page | https://www.mta.info/maps/subway-line-maps/6-line |
+| 5 | MTA Maps | Official transit maps | https://www.mta.info/maps |
+| 6 | "Best way to go about housing while at Hunter?" | Reddit student discussion | https://www.reddit.com/r/HunterCollege/comments/1d4s1es/ |
+| 7 | "Off campus student housing" | Reddit student discussion | https://www.reddit.com/r/HunterCollege/comments/1ggxot5/ |
+| 8 | "51st midtown dorms, 79th dorms, and outside housing" | Reddit student discussion | https://www.reddit.com/r/HunterCollege/comments/1jq6ewe/ |
+| 9 | "Best option for housing as a very low income student?" | Reddit student discussion | https://www.reddit.com/r/HunterCollege/comments/1imttmj/ |
+| 10 | "How is commute to Hunter" | Reddit student discussion | https://www.reddit.com/r/HunterCollege/comments/1h0sblm/ |
+| 11 | NYC Tenant Bill of Rights | Official NYC tenant guidance | https://www.nyc.gov/site/hpd/services-and-information/tenant-bill-of-rights.page |
+| 12 | Spot an Illegal Conversion | Official NYC rental-safety guidance | https://www.nyc.gov/site/buildings/tenant/spot-illegal-conversion.page |
 
 ---
 

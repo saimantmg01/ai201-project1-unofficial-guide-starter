@@ -11,6 +11,19 @@
 
 <!-- What domain did you choose? Why is this knowledge valuable and hard to find through official channels? -->
 
+This project is an unofficial guide to housing and commuting for Hunter College
+students, especially students deciding between Hunter-affiliated housing,
+off-campus housing, and commuting from another part of New York City. It will
+help answer practical questions about housing availability, neighborhoods,
+roommates, transit routes, commute tradeoffs, rental safety, and tenant rights.
+
+This knowledge is difficult to find in one place. Hunter College and the MTA
+publish authoritative information about residences, campus locations, and
+transit routes, but they do not capture students' firsthand experiences with
+long commutes, housing waitlists, roommate searches, summer closures, or the
+tradeoffs between cost and convenience. Those details are scattered across
+official pages, Reddit threads, and New York City housing resources.
+
 ---
 
 ## Documents
@@ -20,16 +33,18 @@
 
 | # | Source | Description | URL or location |
 |---|--------|-------------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 1 | Hunter College Housing | Official overview of Hunter-affiliated residences, limited availability, and the housing application process. | https://www.hunter.cuny.edu/students/campus-life/residence-life/ |
+| 2 | Hunter College 68th Street Campus | Official campus location and directions by subway and bus, including the direct entrance from the 68th Street station. | https://www.hunter.cuny.edu/about/campus-information/68th-street-campus/ |
+| 3 | CUNY Residence Life | CUNY-wide residence options, eligibility information, and housing resources available to students. | https://www.cuny.edu/about/administration/offices/student-affairs/programs-services/housing-residence-life/ |
+| 4 | MTA 6 Train Line Map | Official list of 6 train stops and transfer points, including 68 St-Hunter College. | https://www.mta.info/maps/subway-line-maps/6-line |
+| 5 | MTA Maps | Official subway, accessibility, late-night, and borough bus maps for comparing possible commutes. | https://www.mta.info/maps |
+| 6 | "Best way to go about housing while at Hunter?" | Hunter student discussion about moving closer to campus, residence photos, and how to begin a housing search. | https://www.reddit.com/r/HunterCollege/comments/1d4s1es/ |
+| 7 | "Off campus student housing" | Student experiences with Hunter housing, third-party student housing, apartment costs, and finding roommates. | https://www.reddit.com/r/HunterCollege/comments/1ggxot5/ |
+| 8 | "51st midtown dorms, 79th dorms, and outside housing" | Discussion comparing Hunter residences with outside housing, including summer availability and roommate-search options. | https://www.reddit.com/r/HunterCollege/comments/1jq6ewe/ |
+| 9 | "Best option for housing as a very low income student?" | Student discussion of financial aid, housing costs, roommates, and the burden of a two-hour commute. | https://www.reddit.com/r/HunterCollege/comments/1imttmj/ |
+| 10 | "How is commute to Hunter" | Firsthand comments about commute length, the 6 train, and studying during longer trips. | https://www.reddit.com/r/HunterCollege/comments/1h0sblm/ |
+| 11 | NYC Tenant Bill of Rights | Official guidance on application fees, security deposits, leases, housing quality, evictions, and landlord harassment. | https://www.nyc.gov/site/hpd/services-and-information/tenant-bill-of-rights.page |
+| 12 | Spot an Illegal Conversion | Official NYC warning signs for unsafe or illegally converted rental units. | https://www.nyc.gov/site/buildings/tenant/spot-illegal-conversion.page |
 
 ---
 
@@ -73,11 +88,11 @@
 
 | # | Question | Expected answer |
 |---|----------|-----------------|
-| 1 | | |
-| 2 | | |
-| 3 | | |
-| 4 | | |
-| 5 | | |
+| 1 | Which subway line stops directly at Hunter College's main 68th Street campus? | The 6 train stops at 68 St-Hunter College, and the station has an entrance directly into the college. |
+| 2 | Is Hunter-affiliated housing guaranteed to students? | No. Hunter has limited housing for a student population of more than 22,000, so housing is competitive, not guaranteed, and students must reapply each year. |
+| 3 | What alternatives do students discuss when Hunter housing is unavailable or too expensive? | Students commonly discuss sharing an off-campus apartment with roommates, searching roommate groups or services, and considering third-party student housing. |
+| 4 | What should a student consider before choosing a long commute instead of housing near Hunter? | They should compare rent and housing costs with total travel time, transit reliability, transfers, schedule demands, and the academic and personal burden of spending several hours commuting each day. |
+| 5 | What rental warning signs can indicate an illegal or unsafe NYC apartment? | Warning signs include a suspiciously low price, basement or attic rooms with inadequate exits or windows, unpermitted flex walls, cash-only arrangements, no written lease, and a landlord unwilling to place utilities in the tenant's name. |
 
 ---
 
